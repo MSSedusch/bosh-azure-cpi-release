@@ -231,7 +231,19 @@ module Bosh::AzureCloud
         end
         tasks_creating.push(
           Concurrent::Future.execute do
+
+            last_asg = nil
+            if nic_params.key?(:application_security_groups) && nic_params[:application_security_groups].count > 0
+              last_asg = nic_params[:application_security_groups].pop()
+            end
+
             @azure_client.create_network_interface(resource_group_name, nic_params)
+            # workaround for ASG bug - add ASG one after the other with a small delay
+            if !last_asg.nil?            
+              sleep 60
+              nic_params[:application_security_groups].push(last_asg)
+              @azure_client.create_network_interface(resource_group_name, nic_params)
+            end
             @azure_client.get_network_interface_by_name(resource_group_name, nic_name)
           end
         )
