@@ -347,7 +347,7 @@ module Bosh::AzureCloud
         end
       end
 
-      vm['zones'] = [vm_params[:zone]] unless vm_params[:zone].nil?
+      #vm['zones'] = [vm_params[:zone]] unless vm_params[:zone].nil?
 
       os_disk = {}
       unless vm_params[:os_disk].nil?
@@ -683,7 +683,7 @@ module Bosh::AzureCloud
           vm[:identity][:user_assigned_identities] = result['identity']['userAssignedIdentities']
         end
 
-        vm[:zone]  = result['zones'][0] unless result['zones'].nil?
+        vm[:zone]  = 1
 
         properties = result['properties']
         vm[:provisioning_state] = properties['provisioningState']
@@ -893,7 +893,7 @@ module Bosh::AzureCloud
           'diskSizeGB' => params[:disk_size]
         }
       }
-      disk['zones'] = [params[:zone]] unless params[:zone].nil?
+      #disk['zones'] = [params[:zone]] unless params[:zone].nil?
       http_put(url, disk)
     end
 
@@ -945,7 +945,7 @@ module Bosh::AzureCloud
           }
         }
       }
-      disk['zones'] = [params[:zone]] unless params[:zone].nil?
+      # disk['zones'] = [params[:zone]] unless params[:zone].nil?
       http_put(url, disk)
     end
 
@@ -986,7 +986,7 @@ module Bosh::AzureCloud
           }
         }
       }
-      disk['zones'] = [disk_params[:zone]] unless disk_params[:zone].nil?
+      # disk['zones'] = [disk_params[:zone]] unless disk_params[:zone].nil?
       disk['tags']  = disk_params[:tags] unless disk_params[:tags].nil?
       http_put(disk_url, disk)
     end
@@ -1288,7 +1288,7 @@ module Bosh::AzureCloud
         }
       }
       if params[:zone]
-        public_ip['zones'] = [params[:zone]]
+        # public_ip['zones'] = [params[:zone]]
         public_ip['sku'] = { 'name' => 'Standard' }
         public_ip['properties']['publicIPAllocationMethod'] = 'Static'
       end
@@ -1998,7 +1998,7 @@ module Bosh::AzureCloud
         managed_disk[:tags]      = result['tags']
         managed_disk[:sku_name]  = result['sku']['name']
         managed_disk[:sku_tier]  = result['sku']['tier']
-        managed_disk[:zone]      = result['zones'][0] unless result['zones'].nil?
+        managed_disk[:zone]      = 1
         properties = result['properties']
         managed_disk[:provisioning_state] = properties['provisioningState']
         managed_disk[:disk_size]          = properties['diskSizeGB']
@@ -2143,7 +2143,7 @@ module Bosh::AzureCloud
         ip_address[:location] = result['location']
         ip_address[:tags]     = result['tags']
         ip_address[:sku]      = result['sku']['name'] unless result['sku'].nil?
-        ip_address[:zone]     = result['zones'][0] unless result['zones'].nil?
+        ip_address[:zone]     = 1
 
         properties = result['properties']
         ip_address[:resource_guid]               = properties['resourceGuid']
